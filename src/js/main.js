@@ -1,611 +1,295 @@
 import "../css/main.css";
 
 import Swiper from "swiper";
-
-import {
-  Navigation,
-  Pagination,
-  Autoplay
-} from "swiper/modules";
+import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
+import { createHeader, setupMobileMenu } from "./components/header.js";
 
-
-
-import {
-  createHeader,
-  setupMobileMenu
-} from "./components/header.js";
-
-import {
-  createHero
-} from "./components/hero.js";
+import { createHero } from "./components/hero.js";
 
 import {
   createMovieSection,
   loadMovies,
-  setupMovieSearch
+  setupMovieSearch,
 } from "./components/movieSection.js";
 
 import {
   createNewMoviesSection,
-  loadNewMovies
+  loadNewMovies,
 } from "./components/newMovies.js";
 
 import {
   createSpecialMoviesSection,
-  loadSpecialMovies
+  loadSpecialMovies,
 } from "./components/specialMovies.js";
 
-import {
-  createMovieModal
-} from "./components/movieModal.js";
+import { createMovieModal } from "./components/movieModal.js";
 
-import {
-  createLoginPage
-} from "./components/login.js";
+import { createLoginPage } from "./components/login.js";
 
-import {
-  createSchoolSection,
-  loadSchoolSection
-} from "./components/school.js";
+import { createSchoolSection, loadSchoolSection } from "./components/school.js";
 
 import {
   createExclusiveSections,
-  loadExclusiveSections
+  loadExclusiveSections,
 } from "./components/exclusiveSections.js";
 
-
-
-
-const app =
-  document.querySelector("#app");
-
+const app = document.querySelector("#app");
 
 if (!app) {
-
-  throw new Error(
-    "App element not found"
-  );
-
+  throw new Error("App element not found");
 }
 
-
-
-
+// ساختار اصلی صفحه
 app.innerHTML = `
-
   ${createHeader()}
 
-  <!-- HERO -->
-
-  <div
-    id="heroContainer"
-  ></div>
-
-
-  <!-- MOVIES -->
+  <div id="heroContainer"></div>
 
   ${createMovieSection()}
 
-
-  <!-- NEW MOVIES -->
-
   ${createNewMoviesSection()}
-
-
-  <!-- SPECIAL MOVIES -->
 
   ${createSpecialMoviesSection()}
 
-
-  <!-- FILIMO SCHOOL -->
-
   ${createSchoolSection()}
 
-
-  <!-- EXCLUSIVE + ONLINE -->
-
   ${createExclusiveSections()}
-
 `;
 
-
-
-
+// منوی موبایل
 setupMobileMenu();
 
+// ورود به حساب کاربری
+const desktopLoginButton = document.querySelector("#desktopLoginButton");
 
-
-
-const desktopLoginButton =
-  document.querySelector(
-    "#desktopLoginButton"
-  );
-
-
-const mobileLoginButton =
-  document.querySelector(
-    "#mobileLoginButton"
-  );
-
+const mobileLoginButton = document.querySelector("#mobileLoginButton");
 
 function openLoginPage() {
-
   createLoginPage();
-
 }
-
 
 if (desktopLoginButton) {
-
-  desktopLoginButton.addEventListener(
-    "click",
-    openLoginPage
-  );
-
+  desktopLoginButton.addEventListener("click", openLoginPage);
 }
-
 
 if (mobileLoginButton) {
-
-  mobileLoginButton.addEventListener(
-    "click",
-    openLoginPage
-  );
-
+  mobileLoginButton.addEventListener("click", openLoginPage);
 }
 
+// تنظیمات مشترک اسلایدرها
+function createSlider(selector, nextSelector, prevSelector, options = {}) {
+  const element = document.querySelector(selector);
 
+  if (!element) {
+    console.warn(`Slider not found: ${selector}`);
+    return null;
+  }
 
+  return new Swiper(selector, {
+    modules: [Navigation],
 
-loadSchoolSection();
+    slidesPerView: 2,
+    spaceBetween: 12,
 
+    navigation: {
+      nextEl: nextSelector,
+      prevEl: prevSelector,
+    },
 
+    observer: true,
+    observeParents: true,
 
+    breakpoints: {
+      640: {
+        slidesPerView: 3,
+        spaceBetween: 16,
+      },
 
-const movies =
-  await loadMovies();
+      768: {
+        slidesPerView: 4,
+        spaceBetween: 18,
+      },
 
+      1024: {
+        slidesPerView: 5,
+        spaceBetween: 20,
+      },
 
-window.movies =
-  movies;
+      1280: {
+        slidesPerView: 6,
+        spaceBetween: 20,
+      },
+    },
 
-
-
-
-const heroContainer =
-  document.querySelector(
-    "#heroContainer"
-  );
-
-
-if (heroContainer) {
-
-  heroContainer.innerHTML =
-    createHero(movies);
-
+    ...options,
+  });
 }
 
+// راه‌اندازی سایت
+async function initializeApp() {
+  try {
+    // دریافت اطلاعات فیلم‌ها
+    const movies = await loadMovies();
 
+    window.movies = movies;
 
+    // اسلایدر اصلی
+    const heroContainer = document.querySelector("#heroContainer");
 
-const heroElement =
-  document.querySelector(
-    ".heroSwiper"
-  );
-
-
-if (heroElement) {
-
-  new Swiper(
-    ".heroSwiper",
-    {
-
-      modules: [
-        Navigation,
-        Pagination,
-        Autoplay
-      ],
-
-      loop: true,
-
-      autoplay: {
-
-        delay: 4000,
-
-        disableOnInteraction: false
-
-      },
-
-      pagination: {
-
-        el: ".swiper-pagination",
-
-        clickable: true
-
-      },
-
-      navigation: {
-
-        nextEl:
-          ".swiper-button-next",
-
-        prevEl:
-          ".swiper-button-prev"
-
-      }
-
+    if (heroContainer) {
+      heroContainer.innerHTML = createHero(movies);
     }
-  );
 
+    const heroElement = document.querySelector(".heroSwiper");
+
+    if (heroElement) {
+      new Swiper(".heroSwiper", {
+        modules: [Navigation, Pagination, Autoplay],
+
+        loop: true,
+
+        autoplay: {
+          delay: 4000,
+          disableOnInteraction: false,
+        },
+
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+
+        observer: true,
+        observeParents: true,
+      });
+    }
+
+    // بخش فیلم‌ها
+    const movieSwiper = createSlider(
+      ".movieSwiper",
+      ".movie-next",
+      ".movie-prev",
+    );
+
+    setupMovieSearch(movies, movieSwiper);
+
+    // بخش تازه‌ها
+    const newMoviesSwiper = createSlider(
+      ".newMoviesSwiper",
+      ".new-movies-next",
+      ".new-movies-prev",
+    );
+
+    await loadNewMovies(movies, newMoviesSwiper);
+
+    // بخش ویژه‌ها
+    const specialMoviesSwiper = createSlider(
+      ".specialMoviesSwiper",
+      ".special-movies-next",
+      ".special-movies-prev",
+    );
+
+    await loadSpecialMovies(movies, specialMoviesSwiper);
+
+    // فیلیمو مدرسه
+    await loadSchoolSection();
+
+    // سریال‌های اختصاصی
+    const exclusiveSeriesSwiper = createSlider(
+      ".exclusiveSeriesSwiper",
+      ".exclusive-series-next",
+      ".exclusive-series-prev",
+      {
+        slidesPerView: 1.2,
+
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 16,
+          },
+
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 18,
+          },
+
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 20,
+          },
+
+          1280: {
+            slidesPerView: 5,
+            spaceBetween: 20,
+          },
+        },
+      },
+    );
+
+    // اکران آنلاین
+    const onlineCinemaSwiper = createSlider(
+      ".onlineCinemaSwiper",
+      ".online-cinema-next",
+      ".online-cinema-prev",
+      {
+        slidesPerView: 1.2,
+
+        breakpoints: {
+          640: {
+            slidesPerView: 2,
+            spaceBetween: 16,
+          },
+
+          768: {
+            slidesPerView: 3,
+            spaceBetween: 18,
+          },
+
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 20,
+          },
+
+          1280: {
+            slidesPerView: 5,
+            spaceBetween: 20,
+          },
+        },
+      },
+    );
+
+    // دریافت اطلاعات سریال‌ها و اکران آنلاین
+    await loadExclusiveSections();
+
+    // به‌روزرسانی اسلایدرها
+    [
+      movieSwiper,
+      newMoviesSwiper,
+      specialMoviesSwiper,
+      exclusiveSeriesSwiper,
+      onlineCinemaSwiper,
+    ].forEach((swiper) => {
+      if (swiper && !swiper.destroyed) {
+        swiper.update();
+      }
+    });
+
+    // پنجره جزئیات فیلم
+    createMovieModal();
+
+    console.log("سایت فیلیمو با موفقیت راه‌اندازی شد.");
+  } catch (error) {
+    console.error("خطا در راه‌اندازی سایت:", error);
+  }
 }
 
-
-
-
-const movieSwiper =
-  new Swiper(
-    ".movieSwiper",
-    {
-
-      modules: [
-        Navigation
-      ],
-
-      slidesPerView: 2,
-
-      spaceBetween: 12,
-
-      navigation: {
-
-        nextEl:
-          ".movie-next",
-
-        prevEl:
-          ".movie-prev"
-
-      },
-
-      breakpoints: {
-
-        640: {
-
-          slidesPerView: 3,
-
-          spaceBetween: 16
-
-        },
-
-        768: {
-
-          slidesPerView: 4,
-
-          spaceBetween: 18
-
-        },
-
-        1024: {
-
-          slidesPerView: 5,
-
-          spaceBetween: 20
-
-        },
-
-        1280: {
-
-          slidesPerView: 6,
-
-          spaceBetween: 20
-
-        }
-
-      }
-
-    }
-
-);
-
-
-
-
-setupMovieSearch(
-  movies,
-  movieSwiper
-);
-
-
-
-
-const newMoviesSwiper =
-  new Swiper(
-    ".newMoviesSwiper",
-    {
-
-      modules: [
-        Navigation
-      ],
-
-      slidesPerView: 2,
-
-      spaceBetween: 12,
-
-      navigation: {
-
-        nextEl:
-          ".new-movies-next",
-
-        prevEl:
-          ".new-movies-prev"
-
-      },
-
-      breakpoints: {
-
-        640: {
-
-          slidesPerView: 3,
-
-          spaceBetween: 16
-
-        },
-
-        768: {
-
-          slidesPerView: 4,
-
-          spaceBetween: 18
-
-        },
-
-        1024: {
-
-          slidesPerView: 5,
-
-          spaceBetween: 20
-
-        },
-
-        1280: {
-
-          slidesPerView: 6,
-
-          spaceBetween: 20
-
-        }
-
-      }
-
-    }
-  );
-
-
-
-
-loadNewMovies(
-  movies,
-  newMoviesSwiper
-);
-
-
-
-
-const specialMoviesSwiper =
-  new Swiper(
-    ".specialMoviesSwiper",
-    {
-
-      modules: [
-        Navigation
-      ],
-
-      slidesPerView: 2,
-
-      spaceBetween: 12,
-
-      navigation: {
-
-        nextEl:
-          ".special-movies-next",
-
-        prevEl:
-          ".special-movies-prev"
-
-      },
-
-      breakpoints: {
-
-        640: {
-
-          slidesPerView: 3,
-
-          spaceBetween: 16
-
-        },
-
-        768: {
-
-          slidesPerView: 4,
-
-          spaceBetween: 18
-
-        },
-
-        1024: {
-
-          slidesPerView: 5,
-
-          spaceBetween: 20
-
-        },
-
-        1280: {
-
-          slidesPerView: 6,
-
-          spaceBetween: 20
-
-        }
-
-      }
-
-    }
-  );
-
-
-
-
-loadSpecialMovies(
-  movies,
-  specialMoviesSwiper
-);
-
-
-
-
-const exclusiveSeriesSwiper =
-  new Swiper(
-    ".exclusiveSeriesSwiper",
-    {
-
-      modules: [
-        Navigation
-      ],
-
-      slidesPerView: 1.2,
-
-      spaceBetween: 12,
-
-      navigation: {
-
-        nextEl:
-          ".exclusive-series-prev",
-
-        prevEl:
-          ".exclusive-series-next"
-
-      },
-
-      breakpoints: {
-
-        640: {
-
-          slidesPerView: 2,
-
-          spaceBetween: 16
-
-        },
-
-        768: {
-
-          slidesPerView: 3,
-
-          spaceBetween: 18
-
-        },
-
-        1024: {
-
-          slidesPerView: 4,
-
-          spaceBetween: 20
-
-        },
-
-        1280: {
-
-          slidesPerView: 5,
-
-          spaceBetween: 20
-
-        }
-
-      }
-
-    }
-  );
-
-
-
-
-const onlineCinemaSwiper =
-  new Swiper(
-    ".onlineCinemaSwiper",
-    {
-
-      modules: [
-        Navigation
-      ],
-
-      slidesPerView: 1.2,
-
-      spaceBetween: 12,
-
-      navigation: {
-
-        nextEl:
-          ".online-cinema-prev",
-
-        prevEl:
-          ".online-cinema-next"
-
-      },
-
-      breakpoints: {
-
-        640: {
-
-          slidesPerView: 2,
-
-          spaceBetween: 16
-
-        },
-
-        768: {
-
-          slidesPerView: 3,
-
-          spaceBetween: 18
-
-        },
-
-        1024: {
-
-          slidesPerView: 4,
-
-          spaceBetween: 20
-
-        },
-
-        1280: {
-
-          slidesPerView: 5,
-
-          spaceBetween: 20
-
-        }
-
-      }
-
-    }
-  );
-
-
-
-await loadExclusiveSections();
-
-
-
-
-exclusiveSeriesSwiper.update();
-
-onlineCinemaSwiper.update();
-
-
-
-
-createMovieModal();
+initializeApp();

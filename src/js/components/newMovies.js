@@ -40,8 +40,25 @@ export function createNewMoviesSection() {
   `;
 }
 
+// اصلاح مسیر تصاویر برای GitHub Pages
+function getNewMovieImageUrl(imagePath) {
+  if (!imagePath) {
+    return "";
+  }
 
+  const cleanPath = imagePath
+    .replace(/^\.\/public\//, "")
+    .replace(/^public\//, "")
+    .replace(/^\.\//, "")
+    .replace(/^\/+/, "");
+
+  return `${import.meta.env.BASE_URL}${cleanPath}`;
+}
+
+// ساخت کارت فیلم
 function createNewMovieCard(movie) {
+  const imageUrl = getNewMovieImageUrl(movie.newImage || movie.image);
+
   return `
     <div class="swiper-slide">
 
@@ -55,10 +72,11 @@ function createNewMovieCard(movie) {
         >
 
           <img
-            src="${movie.newImage}"
+            src="${imageUrl}"
             alt="${movie.title}"
             loading="lazy"
             class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            onerror="this.style.display='none'"
           />
 
           <div
@@ -95,22 +113,17 @@ function createNewMovieCard(movie) {
   `;
 }
 
-
+// دریافت و نمایش فیلم‌های جدید
 export function loadNewMovies(movies, swiper) {
-  const newMoviesList =
-    document.querySelector("#newMoviesList");
+  const newMoviesList = document.querySelector("#newMoviesList");
 
   if (!newMoviesList) {
     return;
   }
 
-  const newMovies =
-    movies.filter(
-      (movie) => movie.category === "new"
-    );
+  const newMovies = movies.filter((movie) => movie.category === "new");
 
   if (newMovies.length === 0) {
-
     newMoviesList.innerHTML = `
       <div class="swiper-slide">
         <div class="py-10 text-center text-gray-400">
@@ -119,15 +132,16 @@ export function loadNewMovies(movies, swiper) {
       </div>
     `;
 
-    swiper.update();
+    if (swiper) {
+      swiper.update();
+    }
 
     return;
   }
 
-  newMoviesList.innerHTML =
-    newMovies
-      .map(createNewMovieCard)
-      .join("");
+  newMoviesList.innerHTML = newMovies.map(createNewMovieCard).join("");
 
-  swiper.update();
+  if (swiper) {
+    swiper.update();
+  }
 }

@@ -87,7 +87,7 @@ export function createMovieSection() {
 }
 
 // ==========================================
-// اصلاح مسیر تصاویر
+// اصلاح مسیر تصاویر برای GitHub Pages
 // ==========================================
 
 function getMovieImageUrl(imagePath) {
@@ -154,26 +154,49 @@ function createMovieCard(movie) {
 }
 
 // ==========================================
-// دریافت اطلاعات فیلم‌ها از db.json
+// دریافت اطلاعات فیلم‌ها از API
 // ==========================================
 
 export async function loadMovies() {
   try {
-    const response = await fetch(`${import.meta.env.BASE_URL}db.json`);
+    let response;
+
+    if (import.meta.env.PROD) {
+      // نسخه منتشرشده در GitHub Pages
+      response = await fetch(
+        `${import.meta.env.BASE_URL}db.json`
+      );
+    } else {
+      // نسخه محلی با JSON Server
+      response = await fetch(
+        "http://localhost:3000/movies"
+      );
+    }
 
     if (!response.ok) {
-      throw new Error(`خطا در دریافت اطلاعات: ${response.status}`);
+      throw new Error(
+        `خطا در دریافت فیلم‌ها: ${response.status}`
+      );
     }
 
     const data = await response.json();
 
-    // پشتیبانی از ساختارهای مختلف JSON
-    const movies = Array.isArray(data) ? data : (data.movies ?? []);
+    const movies = Array.isArray(data)
+      ? data
+      : data.movies ?? [];
+
+    if (!Array.isArray(movies)) {
+      throw new Error(
+        "ساختار اطلاعات فیلم‌ها صحیح نیست."
+      );
+    }
 
     const movieList = document.querySelector("#movieList");
 
     if (movieList) {
-      movieList.innerHTML = movies.map(createMovieCard).join("");
+      movieList.innerHTML = movies
+        .map(createMovieCard)
+        .join("");
     }
 
     return movies;
@@ -202,9 +225,14 @@ export async function loadMovies() {
 
 export function setupMovieSearch(movies, movieSwiper) {
   const searchInput = document.querySelector("#searchInput");
-  const mobileSearchInput = document.querySelector("#mobileSearchInput");
+  const mobileSearchInput = document.querySelector(
+    "#mobileSearchInput"
+  );
+
   const movieList = document.querySelector("#movieList");
-  const genreButtons = document.querySelectorAll(".genre-filter");
+  const genreButtons = document.querySelectorAll(
+    ".genre-filter"
+  );
 
   if (!movieList) {
     return;
@@ -216,7 +244,8 @@ export function setupMovieSearch(movies, movieSwiper) {
   function renderMovies() {
     const filteredMovies = movies.filter((movie) => {
       const matchesGenre =
-        selectedGenre === "all" || movie.genre === selectedGenre;
+        selectedGenre === "all" ||
+        movie.genre === selectedGenre;
 
       const matchesSearch = (movie.title ?? "")
         .toLowerCase()
@@ -234,7 +263,9 @@ export function setupMovieSearch(movies, movieSwiper) {
         </div>
       `;
     } else {
-      movieList.innerHTML = filteredMovies.map(createMovieCard).join("");
+      movieList.innerHTML = filteredMovies
+        .map(createMovieCard)
+        .join("");
     }
 
     if (movieSwiper) {
@@ -267,16 +298,31 @@ export function setupMovieSearch(movies, movieSwiper) {
       selectedGenre = button.dataset.genre ?? "all";
 
       genreButtons.forEach((item) => {
-        item.classList.remove("bg-[#e5a900]", "text-white", "active");
+        item.classList.remove(
+          "bg-[#e5a900]",
+          "text-white",
+          "active"
+        );
 
-        item.classList.add("bg-white/10", "text-gray-300");
+        item.classList.add(
+          "bg-white/10",
+          "text-gray-300"
+        );
       });
 
-      button.classList.remove("bg-white/10", "text-gray-300");
+      button.classList.remove(
+        "bg-white/10",
+        "text-gray-300"
+      );
 
-      button.classList.add("bg-[#e5a900]", "text-white", "active");
+      button.classList.add(
+        "bg-[#e5a900]",
+        "text-white",
+        "active"
+      );
 
       renderMovies();
-    });
+
+});
   });
 }

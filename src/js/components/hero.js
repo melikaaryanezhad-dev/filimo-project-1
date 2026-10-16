@@ -1,3 +1,15 @@
+function getHeroImageUrl(imagePath) {
+  if (!imagePath) {
+    return "";
+  }
+
+  const cleanPath = imagePath
+    .replace(/^\.\/public\//, "")
+    .replace(/^public\//, "")
+    .replace(/^\.\//, "");
+
+  return `${import.meta.env.BASE_URL}${cleanPath}`;
+}
 
 
 export function createHero(movies) {
@@ -33,6 +45,8 @@ export function createHero(movies) {
 
           ${movies.map((movie) => {
 
+            const heroImageUrl = getHeroImageUrl(movie.heroImage);
+
             return `
               <div
                 class="swiper-slide"
@@ -40,7 +54,7 @@ export function createHero(movies) {
 
                 <div
                   class="relative h-[420px] bg-cover bg-center md:h-[550px]"
-                  style="background-image: url('${movie.heroImage}');"
+                  style="background-image: url('${heroImageUrl}');"
                 >
 
                   <div
@@ -63,14 +77,14 @@ export function createHero(movies) {
                         <span
                           class="text-sm text-[#00b894]"
                         >
-                          ${movie.genre}
+                          ${movie.genre ?? ""}
                         </span>
 
 
                         <h1
                           class="mt-4 text-4xl font-black leading-tight text-white md:text-6xl"
                         >
-                          ${movie.title}
+                          ${movie.title ?? ""}
                         </h1>
 
 
@@ -81,14 +95,14 @@ export function createHero(movies) {
                           <span
                             class="text-gray-300"
                           >
-                            ${movie.year}
+                            ${movie.year ?? ""}
                           </span>
 
 
                           <span
                             class="text-yellow-400"
                           >
-                            ★ ${movie.rating}
+                            ★ ${movie.rating ?? ""}
                           </span>
 
                         </div>
@@ -97,7 +111,7 @@ export function createHero(movies) {
                         <p
                           class="mt-5 text-sm leading-8 text-gray-300 md:text-base"
                         >
-                          ${movie.description}
+                          ${movie.description ?? ""}
                         </p>
 
 

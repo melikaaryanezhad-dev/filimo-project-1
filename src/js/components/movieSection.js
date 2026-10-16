@@ -1,27 +1,12 @@
-
-
 export function createMovieSection() {
-
   return `
-    <section
-      id="movies"
-      class="bg-[#111] py-12"
-    >
+    <section id="movies" class="bg-[#111] py-12">
+      <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
-      <div
-        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"
-      >
-
-        <div
-          class="mb-6 flex items-center justify-between"
-        >
-
-          <h2
-            class="text-2xl font-bold text-white md:text-3xl"
-          >
+        <div class="mb-6 flex items-center justify-between">
+          <h2 class="text-2xl font-bold text-white md:text-3xl">
             پیشنهاد برای تماشا
           </h2>
-
 
           <button
             type="button"
@@ -29,17 +14,10 @@ export function createMovieSection() {
           >
             مشاهده همه
           </button>
-
         </div>
 
-
-        <!-- FILTER -->
-
         <div class="mb-7">
-
-          <div
-            class="flex flex-wrap gap-2"
-          >
+          <div class="flex flex-wrap gap-2">
 
             <button
               type="button"
@@ -49,7 +27,6 @@ export function createMovieSection() {
               همه
             </button>
 
-
             <button
               type="button"
               class="genre-filter rounded-lg bg-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/20"
@@ -57,7 +34,6 @@ export function createMovieSection() {
             >
               علمی تخیلی
             </button>
-
 
             <button
               type="button"
@@ -67,7 +43,6 @@ export function createMovieSection() {
               اکشن
             </button>
 
-
             <button
               type="button"
               class="genre-filter rounded-lg bg-white/10 px-4 py-2 text-sm text-gray-300 transition hover:bg-white/20"
@@ -75,7 +50,6 @@ export function createMovieSection() {
             >
               ماجراجویی
             </button>
-
 
             <button
               type="button"
@@ -86,431 +60,269 @@ export function createMovieSection() {
             </button>
 
           </div>
-
         </div>
 
-
-        <!-- MOVIES -->
-
         <div class="relative">
-
-          <div
-            class="swiper movieSwiper"
-          >
-
-            <div
-              class="swiper-wrapper"
-              id="movieList"
-            >
-
-              <div
-                class="swiper-slide"
-              >
-
-                <div
-                  class="py-10 text-center text-sm text-gray-400"
-                >
+          <div class="swiper movieSwiper">
+            <div class="swiper-wrapper" id="movieList">
+              <div class="swiper-slide">
+                <div class="py-10 text-center text-sm text-gray-400">
                   در حال دریافت فیلم‌ها...
                 </div>
-
               </div>
-
             </div>
-
           </div>
 
-
-          <div
-            class="swiper-button-prev movie-prev"
-          ></div>
-
-          <div
-            class="swiper-button-next movie-next"
-          ></div>
-
+          <div class="swiper-button-prev movie-prev"></div>
+          <div class="swiper-button-next movie-next"></div>
         </div>
 
       </div>
-
     </section>
   `;
-
 }
 
 
+// اصلاح مسیر تصاویر برای نسخه محلی و آنلاین
+function getMovieImageUrl(imagePath) {
+  if (!imagePath) {
+    return "";
+  }
+
+  // آدرس تصاویر خارجی را تغییر نمی‌دهیم.
+  if (/^https?:\/\//i.test(imagePath)) {
+    return imagePath;
+  }
+
+  // حذف پیشوند public از مسیر ذخیره‌شده در db.json
+  let path = imagePath
+    .replace(/^\.\/public\//, "")
+    .replace(/^public\//, "")
+    .replace(/^\.\//, "");
+
+  // استفاده از آدرس پایه صحیح برای GitHub Pages
+  if (path.startsWith("/filimo-project-1/")) {
+    return path;
+  }
+
+  path = path.replace(/^\/+/, "");
+
+  return `${import.meta.env.BASE_URL}${path}`;
+}
 
 
 function createMovieCard(movie) {
+  const imageUrl = getMovieImageUrl(movie.image);
 
   return `
-    <div
-      class="swiper-slide"
-    >
-
+    <div class="swiper-slide">
       <article
         class="movie-card group cursor-pointer"
         data-movie-id="${movie.id}"
       >
 
-        <div
-          class="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/5 bg-[#222]"
-        >
+        <div class="relative aspect-[2/3] overflow-hidden rounded-xl border border-white/5 bg-[#222]">
 
           <img
-            src="${movie.image}"
+            src="${imageUrl}"
             alt="${movie.title}"
+            loading="lazy"
             class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+            onerror="this.style.display='none'"
           />
 
+          <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"></div>
 
-          <div
-            class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-70"
-          ></div>
-
-
-          <span
-            class="absolute right-2 top-2 rounded-md bg-black/70 px-2 py-1 text-xs text-white"
-          >
-            ${movie.year}
+          <span class="absolute right-2 top-2 rounded-md bg-black/70 px-2 py-1 text-xs text-white">
+            ${movie.year ?? ""}
           </span>
 
-
-          <span
-            class="absolute bottom-2 left-2 rounded-md bg-black/70 px-2 py-1 text-xs text-yellow-400"
-          >
-            ★ ${movie.rating}
+          <span class="absolute bottom-2 left-2 rounded-md bg-black/70 px-2 py-1 text-xs text-yellow-400">
+            ★ ${movie.rating ?? ""}
           </span>
 
         </div>
 
-
-        <h3
-          class="mt-3 truncate text-sm font-medium text-white transition group-hover:text-[#e5a900] md:text-base"
-
->
-          ${movie.title}
+<h3 class="mt-3 truncate text-sm font-medium text-white transition group-hover:text-[#e5a900] md:text-base">
+          ${movie.title ?? ""}
         </h3>
 
-
-        <p
-          class="mt-1 text-xs text-gray-500"
-        >
-          ${movie.genre}
+        <p class="mt-1 text-xs text-gray-500">
+          ${movie.genre ?? ""}
         </p>
 
       </article>
-
     </div>
   `;
-
 }
-
-
 
 
 export async function loadMovies() {
-
   try {
+    let response;
 
-    const response =
-      await fetch(
+    if (import.meta.env.PROD) {
+      // نسخه منتشرشده در GitHub Pages
+      response = await fetch(
+        `${import.meta.env.BASE_URL}db.json`
+      );
+    } else {
+      // نسخه محلی با JSON Server
+      response = await fetch(
         "http://localhost:3000/movies"
       );
-
+    }
 
     if (!response.ok) {
-
       throw new Error(
-        "خطا در دریافت فیلم‌ها"
+        `خطا در دریافت فیلم‌ها: ${response.status}`
       );
-
     }
 
+    const data = await response.json();
 
-    const movies =
-      await response.json();
+    // در نسخه آنلاین، فیلم‌ها داخل ویژگی movies هستند.
+    // در JSON Server محلی، پاسخ مستقیماً آرایه است.
+    const movies = Array.isArray(data)
+      ? data
+      : data.movies;
 
-
-    const movieList =
-      document.querySelector(
-        "#movieList"
+    if (!Array.isArray(movies)) {
+      throw new Error(
+        "ساختار اطلاعات فیلم‌ها در db.json صحیح نیست."
       );
+    }
 
+    const movieList = document.querySelector("#movieList");
 
     if (movieList) {
-
-      movieList.innerHTML =
-        movies
-          .map(createMovieCard)
-          .join("");
-
+      movieList.innerHTML = movies
+        .map(createMovieCard)
+        .join("");
     }
-
 
     return movies;
 
-
   } catch (error) {
+    console.error("خطا در دریافت فیلم‌ها:", error);
 
-    console.error(error);
-
-
-    const movieList =
-      document.querySelector(
-        "#movieList"
-      );
-
+    const movieList = document.querySelector("#movieList");
 
     if (movieList) {
-
       movieList.innerHTML = `
-        <div
-          class="swiper-slide"
-        >
-
-          <div
-            class="py-10 text-center text-red-400"
-          >
+        <div class="swiper-slide">
+          <div class="py-10 text-center text-red-400">
             دریافت فیلم‌ها با مشکل مواجه شد.
           </div>
-
         </div>
       `;
-
     }
 
-
     return [];
-
   }
-
 }
 
 
-
-
-export function setupMovieSearch(
-  movies,
-  movieSwiper
-) {
-
-  const searchInput =
-    document.querySelector(
-      "#searchInput"
-    );
-
-
-  const mobileSearchInput =
-    document.querySelector(
-      "#mobileSearchInput"
-    );
-
-
-  const movieList =
-    document.querySelector(
-      "#movieList"
-    );
-
-
-  const genreButtons =
-    document.querySelectorAll(
-      ".genre-filter"
-    );
-
+export function setupMovieSearch(movies, movieSwiper) {
+  const searchInput = document.querySelector("#searchInput");
+  const mobileSearchInput = document.querySelector("#mobileSearchInput");
+  const movieList = document.querySelector("#movieList");
+  const genreButtons = document.querySelectorAll(".genre-filter");
 
   if (!movieList) {
     return;
   }
 
-
-  let selectedGenre =
-    "all";
-
-
-  let searchText =
-    "";
-
+  let selectedGenre = "all";
+  let searchText = "";
 
   function renderMovies() {
+    const filteredMovies = movies.filter((movie) => {
+      const matchesGenre =
+        selectedGenre === "all" ||
+        movie.genre === selectedGenre;
 
-    const filteredMovies =
-      movies.filter((movie) => {
+      const matchesSearch =
+        (movie.title ?? "")
+          .toLowerCase()
+          .includes(searchText);
 
-        const matchesGenre =
-          selectedGenre === "all" ||
-          movie.genre ===
-            selectedGenre;
+      return matchesGenre && matchesSearch;
+    });
 
-
-        const matchesSearch =
-          movie.title
-            .toLowerCase()
-            .includes(searchText);
-
-
-        return (
-          matchesGenre &&
-          matchesSearch
-        );
-
-      });
-
-
-    if (
-      filteredMovies.length === 0
-    ) {
-
+    if (filteredMovies.length === 0) {
       movieList.innerHTML = `
-        <div
-          class="swiper-slide"
-        >
-
-          <div
-            class="py-10 text-center text-gray-400"
-          >
+        <div class="swiper-slide">
+          <div class="py-10 text-center text-gray-400">
             فیلمی پیدا نشد.
           </div>
-
         </div>
       `;
-
     } else {
-
-      movieList.innerHTML =
-        filteredMovies
-          .map(createMovieCard)
-          .join("");
-
+      movieList.innerHTML = filteredMovies
+        .map(createMovieCard)
+        .join("");
     }
 
-
-    movieSwiper.update();
-
-    movieSwiper.slideTo(0);
-
+    if (movieSwiper) {
+      movieSwiper.update();
+      movieSwiper.slideTo(0);
+    }
   }
-
-
-
 
   if (searchInput) {
+    searchInput.addEventListener("input", () => {
+      searchText = searchInput.value.trim().toLowerCase();
 
-    searchInput.addEventListener(
-      "input",
-      () => {
-
-        searchText =
-          searchInput.value
-            .trim()
-            .toLowerCase();
-
-
-        if (
-          mobileSearchInput &&
-          mobileSearchInput.value !==
-            searchInput.value
-        ) {
-
-          mobileSearchInput.value =
-            searchInput.value;
-
-        }
-
-
-        renderMovies();
-
+      if (mobileSearchInput) {
+        mobileSearchInput.value = searchInput.value;
       }
-    );
 
+      renderMovies();
+    });
   }
-
-
-
 
   if (mobileSearchInput) {
+    mobileSearchInput.addEventListener("input", () => {
+      searchText = mobileSearchInput.value.trim().toLowerCase();
 
-    mobileSearchInput.addEventListener(
-      "input",
-      () => {
-
-        searchText =
-          mobileSearchInput.value
-            .trim()
-            .toLowerCase();
-
-
-        if (
-          searchInput &&
-          searchInput.value !==
-            mobileSearchInput.value
-        ) {
-
-          searchInput.value =
-            mobileSearchInput.value;
-
-        }
-
-
-        renderMovies();
-
+      if (searchInput) {
+        searchInput.value = mobileSearchInput.value;
       }
-    );
 
+      renderMovies();
+    });
   }
 
+  genreButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      selectedGenre = button.dataset.genre;
 
+      genreButtons.forEach((item) => {
+        item.classList.remove(
+          "bg-[#e5a900]",
+          "text-white",
+          "active"
+        );
 
+        item.classList.add(
+          "bg-white/10",
+          "text-gray-300"
+        );
+      });
 
-  genreButtons.forEach(
-    (button) => {
-
-      button.addEventListener(
-        "click",
-        () => {
-
-          selectedGenre =
-            button.dataset.genre;
-
-
-          genreButtons.forEach(
-            (item) => {
-
-              item.classList.remove(
-
-"bg-[#e5a900]",
-                "text-white",
-                "active"
-              );
-
-
-              item.classList.add(
-                "bg-white/10",
-                "text-gray-300"
-              );
-
-            }
-          );
-
-
-          button.classList.remove(
-            "bg-white/10",
-            "text-gray-300"
-          );
-
-
-          button.classList.add(
-            "bg-[#e5a900]",
-            "text-white",
-            "active"
-          );
-
-
-          renderMovies();
-
-        }
+      button.classList.remove(
+        "bg-white/10",
+        "text-gray-300"
       );
 
-    }
-  );
+      button.classList.add(
+        "bg-[#e5a900]",
+        "text-white",
+        "active"
+      );
 
+      renderMovies();
+    });
+  });
 }

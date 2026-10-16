@@ -1,0 +1,103 @@
+@import "tailwindcss";
+
+
+
+html {
+  scroll-behavior: smooth;
+}
+
+
+body {
+  margin: 0;
+  background: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+
+::-webkit-scrollbar-track {
+  background: #111;
+}
+
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 999px;
+}
+
+
+::-webkit-scrollbar-thumb:hover {
+  background: #D9A111;
+}
+
+
+
+.swiper-button-next,
+.swiper-button-prev {
+  color: #ffffff;
+}
+
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+
+.swiper-pagination-bullet {
+  background: #ffffff;
+  opacity: 0.5;
+}
+
+
+.swiper-pagination-bullet-active {
+  background:#D9A111;
+  opacity: 1;
+}
+
+
+
+
+.movie-card,
+.new-movie-card {
+  user-select: none;
+}
+
+
+.movie-card img,
+.new-movie-card img {
+  display: block;
+}
+
+
+
+
+#school {
+  scroll-margin-top: 80px;
+}
+
+
+#movies,
+#new-movies,
+#special-movies {
+  scroll-margin-top: 80px;
+}
+
+
+
+
+@media (max-width: 640px) {
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    display: none;
+  }
+
+}

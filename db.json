@@ -1,0 +1,236 @@
+{
+  "movies": [
+    {
+      "id": 1,
+      "title": "کلاغ",
+      "genre": "درام",
+      "year": 2014,
+      "rating": 8.7,
+      "category": "new",
+      "image": "./public/images/movie-1.jpg.jpg",
+      "newImage": "./public/images/new-1.jpg.jpg",
+      "specialImage": "./public/images/special-1.jpg.jpg",
+      "heroImage": "./public/images/hero-1.jpg.jpeg",
+      "description": "یه نفر حواسش بهت هست."
+    },
+    {
+      "id": 2,
+      "title": "هزار و یک شب",
+      "genre": "درام",
+      "year": 2010,
+      "rating": 8.8,
+      "category": "new",
+      "image": "./public/images/movie-2.jpg.jpg",
+      "newImage": "./public/images/new-2.jpg.jpg",
+      "specialImage": "./public/images/special-2.jpg.jpg",
+      "heroImage": "./public/images/hero-2.jpg.jpeg",
+      "description": "داستان هزار و یک شب"
+    },
+    {
+      "id": 3,
+      "title": "The Dark Knight",
+      "genre": "اکشن",
+      "year": 2008,
+      "rating": 9.0,
+      "category": "special",
+      "image": "./public/images/movie-3.jpg.jpg",
+      "newImage": "./public/images/new-3.jpg.jpg",
+      "specialImage": "./public/images/special-1.jpg.jpg",
+      "heroImage": "./public/images/hero-3.jpg.jpeg",
+      "description": "دزدی حرفه‌ای تلاش می‌کند با ورود به رؤیای دیگران اطلاعات ارزشمند به دست آورد."
+    },
+    {
+      "id": 4,
+      "title": "روشن",
+      "genre": "ماجراجویی",
+      "year": 2009,
+      "rating": 7.8,
+      "category": "new",
+      "image": "./public/images/movie-4.jpg.jpg",
+      "newImage": "./public/images/new-3.jpg.jpg",
+      "specialImage": "./public/images/special-2.jpg.jpg",
+      "heroImage": "./public/images/hero-4.jpg.jpeg",
+      "description": "روایتی از پذیرش و تاب آوری"
+    },
+    {
+      "id": 5,
+      "title": "شفرونی",
+      "genre": "آموزشی",
+      "year": 1999,
+      "rating": 8.7,
+      "category": "special",
+      "image": "./public/images/movie-5.jpg.jpg",
+      "newImage": "./public/images/new-3.jpg.jpg",
+      "specialImage": "./public/images/special-2.jpg.jpg",
+      "heroImage": "./public/images/hero-5.jpg.jpeg",
+      "description": "چمدونت رو بستنی قاشق چنگال یادت نره."
+    },
+    {
+      "id": 6,
+      "title": "فان ابوطالب",
+      "genre": "دورهمی",
+      "year": 2000,
+      "rating": 8.5,
+      "category": "new",
+      "image": "./public/images/movie-6.jpg.jpg",
+      "newImage": "./public/images/new-4.jpg.jpg",
+      "specialImage": "./public/images/special-1.jpg.jpg",
+      "heroImage": "./public/images/hero-6.jpg.jpeg",
+      "description": "ببین کی برگشته بالاسر فوتبال..."
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "name": "Melika",
+      "email": "melika@example.com",
+      "password": "123456"
+    }
+  ],
+  "school": {
+    "title": "فیلیمو مدرسه",
+    "description": "نگران تحصیل فرزندتون نباشید، وقتی مسیر رو بلد باشید آینده درخشانه!",
+    "grades": [
+      {
+        "id": 1,
+        "title": "پیش دبستانی"
+      },
+      {
+        "id": 2,
+        "title": "اول"
+      },
+      {
+        "id": 3,
+        "title": "دوم"
+      },
+      {
+        "id": 4,
+        "title": "سوم"
+      },
+      {
+        "id": 5,
+        "title": "چهارم"
+      },
+      {
+        "id": 6,
+        "title": "پنجم"
+      },
+      {
+        "id": 7,
+        "title": "ششم"
+      },
+      {
+        "id": 8,
+        "title": "هفتم"
+      },
+      {
+        "id": 9,
+        "title": "هشتم"
+      },
+      {
+        "id": 10,
+        "title": "نهم"
+      },
+      {
+        "id": 11,
+        "title": "دهم"
+      },
+      {
+        "id": 12,
+        "title": "یازدهم"
+      },
+      {
+        "id": 13,
+        "title": "دوازدهم"
+      }
+    ],
+    "services": [
+      {
+        "id": 1,
+        "title": "معلم خصوصی آنلاین",
+        "icon": "▣"
+      },
+      {
+        "id": 2,
+        "title": "دوره‌های جذاب مهارتی",
+        "icon": "●"
+      },
+      {
+        "id": 3,
+        "title": "دوره جمع‌بندی شب امتحانی",
+        "icon": "✓"
+      },
+      {
+        "id": 4,
+        "title": "دوره تیزهوشان",
+        "icon": "⚙"
+      }
+    ]
+  },
+  "specialSections": {
+    "exclusiveSeries": [
+      {
+        "id": 1,
+        "title": "سریال اختصاصی اول",
+        "image": "./public/images/series-1.jpg.jpg",
+        "label": "اختصاصی"
+      },
+      {
+        "id": 2,
+        "title": "سریال اختصاصی دوم",
+        "image": "./public/images/series-2.jpg.jpg",
+        "label": "اختصاصی"
+      },
+      {
+        "id": 3,
+        "title": "سریال اختصاصی سوم",
+        "image": "./public/images/series-3.jpg.jpg",
+        "label": "اختصاصی"
+      },
+      {
+        "id": 4,
+        "title": "سریال اختصاصی چهارم",
+        "image": "./public/images/series-4.jpg.jpg",
+        "label": "اختصاصی"
+      },
+      {
+        "id": 5,
+        "title": "سریال اختصاصی پنجم",
+        "image": "./public/images/series-5.jpg.jpg",
+        "label": "اختصاصی"
+      }
+    ],
+    "onlineCinema": [
+      {
+        "id": 1,
+        "title": "اکران آنلاین اول",
+        "image": "./public/images/online-1.jpg.jpg",
+        "label": "اکران آنلاین"
+      },
+      {
+        "id": 2,
+        "title": "اکران آنلاین دوم",
+        "image": "./public/images/online-3.jpg.jpg",
+        "label": "اکران آنلاین"
+      },
+      {
+        "id": 3,
+        "title": "اکران آنلاین سوم",
+        "image": "./public/images/online-4.jpg.jpg",
+        "label": "اکران آنلاین"
+      },
+      {
+        "id": 4,
+        "title": "اکران آنلاین چهارم",
+        "image": "./public/images/online-5.jpg.jpg",
+        "label": "اکران آنلاین"
+      },
+      {
+        "id": 5,
+        "title": "اکران آنلاین پنجم",
+        "image": "./public/images/online-6.jpg.jpg",
+        "label": "اکران آنلاین"
+      }
+    ]
+  }
+}

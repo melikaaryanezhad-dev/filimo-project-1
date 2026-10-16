@@ -83,21 +83,22 @@ export function createMovieSection() {
 }
 
 
-// اصلاح مسیر تصاویر برای نسخه محلی و آنلاین
+// تبدیل مسیر تصاویر برای نسخه محلی و GitHub Pages
 function getMovieImageUrl(imagePath) {
-if (!imagePath) {
-return "";
+  if (!imagePath) {
+    return "";
+  }
+
+  const cleanPath = imagePath
+    .replace(/^\.\/public\//, "")
+    .replace(/^public\//, "")
+    .replace(/^\.\//, "");
+
+  return `${import.meta.env.BASE_URL}${cleanPath}`;
 }
 
-const cleanPath = imagePath
-.replace(/^./public//, "")
-.replace(/^public//, "")
-.replace(/^.//, "");
 
-return "${import.meta.env.BASE_URL}${cleanPath}";
-}
-
-
+// ساخت کارت هر فیلم
 function createMovieCard(movie) {
   const imageUrl = getMovieImageUrl(movie.image);
 
@@ -112,7 +113,7 @@ function createMovieCard(movie) {
 
           <img
             src="${imageUrl}"
-            alt="${movie.title}"
+            alt="${movie.title ?? "فیلم"}"
             loading="lazy"
             class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
             onerror="this.style.display='none'"
@@ -130,7 +131,7 @@ function createMovieCard(movie) {
 
         </div>
 
-<h3 class="mt-3 truncate text-sm font-medium text-white transition group-hover:text-[#e5a900] md:text-base">
+        <h3 class="mt-3 truncate text-sm font-medium text-white transition group-hover:text-[#e5a900] md:text-base">
           ${movie.title ?? ""}
         </h3>
 
@@ -138,23 +139,26 @@ function createMovieCard(movie) {
           ${movie.genre ?? ""}
         </p>
 
-      </article>
+      </ar
+
+ticle>
     </div>
   `;
 }
 
 
+// دریافت اطلاعات فیلم‌ها
 export async function loadMovies() {
   try {
     let response;
 
     if (import.meta.env.PROD) {
-      // نسخه منتشرشده در GitHub Pages
+      // دریافت اطلاعات در نسخه منتشرشده
       response = await fetch(
         `${import.meta.env.BASE_URL}db.json`
       );
     } else {
-      // نسخه محلی با JSON Server
+      // دریافت اطلاعات از JSON Server در نسخه محلی
       response = await fetch(
         "http://localhost:3000/movies"
       );
@@ -168,8 +172,6 @@ export async function loadMovies() {
 
     const data = await response.json();
 
-    // در نسخه آنلاین، فیلم‌ها داخل ویژگی movies هستند.
-    // در JSON Server محلی، پاسخ مستقیماً آرایه است.
     const movies = Array.isArray(data)
       ? data
       : data.movies;
@@ -210,11 +212,17 @@ export async function loadMovies() {
 }
 
 
+// جست‌وجو و فیلتر فیلم‌ها
 export function setupMovieSearch(movies, movieSwiper) {
   const searchInput = document.querySelector("#searchInput");
-  const mobileSearchInput = document.querySelector("#mobileSearchInput");
+  const mobileSearchInput = document.querySelector(
+    "#mobileSearchInput"
+  );
+
   const movieList = document.querySelector("#movieList");
-  const genreButtons = document.querySelectorAll(".genre-filter");
+  const genreButtons = document.querySelectorAll(
+    ".genre-filter"
+  );
 
   if (!movieList) {
     return;
@@ -257,9 +265,12 @@ export function setupMovieSearch(movies, movieSwiper) {
     }
   }
 
+  // جست‌وجوی دسکتاپ
   if (searchInput) {
     searchInput.addEventListener("input", () => {
-      searchText = searchInput.value.trim().toLowerCase();
+      searchText = searchInput.value
+        .trim()
+        .toLowerCase();
 
       if (mobileSearchInput) {
         mobileSearchInput.value = searchInput.value;
@@ -269,9 +280,12 @@ export function setupMovieSearch(movies, movieSwiper) {
     });
   }
 
+  // جست‌وجوی موبایل
   if (mobileSearchInput) {
     mobileSearchInput.addEventListener("input", () => {
-      searchText = mobileSearchInput.value.trim().toLowerCase();
+      searchText = mobileSearchInput.value
+        .trim()
+        .toLowerCase();
 
       if (searchInput) {
         searchInput.value = mobileSearchInput.value;
@@ -281,6 +295,7 @@ export function setupMovieSearch(movies, movieSwiper) {
     });
   }
 
+  // فیلتر ژانر
   genreButtons.forEach((button) => {
     button.addEventListener("click", () => {
       selectedGenre = button.dataset.genre;

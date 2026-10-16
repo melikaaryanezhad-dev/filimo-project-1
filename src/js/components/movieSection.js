@@ -85,29 +85,16 @@ export function createMovieSection() {
 
 // اصلاح مسیر تصاویر برای نسخه محلی و آنلاین
 function getMovieImageUrl(imagePath) {
-  if (!imagePath) {
-    return "";
-  }
+if (!imagePath) {
+return "";
+}
 
-  // آدرس تصاویر خارجی را تغییر نمی‌دهیم.
-  if (/^https?:\/\//i.test(imagePath)) {
-    return imagePath;
-  }
+const cleanPath = imagePath
+.replace(/^./public//, "")
+.replace(/^public//, "")
+.replace(/^.//, "");
 
-  // حذف پیشوند public از مسیر ذخیره‌شده در db.json
-  let path = imagePath
-    .replace(/^\.\/public\//, "")
-    .replace(/^public\//, "")
-    .replace(/^\.\//, "");
-
-  // استفاده از آدرس پایه صحیح برای GitHub Pages
-  if (path.startsWith("/filimo-project-1/")) {
-    return path;
-  }
-
-  path = path.replace(/^\/+/, "");
-
-  return `${import.meta.env.BASE_URL}${path}`;
+return "${import.meta.env.BASE_URL}${cleanPath}";
 }
 
 
